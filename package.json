@@ -1,0 +1,26 @@
+{
+  "name": "MediumScraper",
+  "version": "1.0.0",
+  "description": "Scraps popular blogging website https://medium.com and find all possible hyperlinks present within https://medium.com website and generate a CSV output.",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/jaydeep17/Medium-Scraper.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/jaydeep17/Medium-Scraper/issues"
+  },
+  "homepage": "https://github.com/jaydeep17/Medium-Scraper#readme",
+  "devDependencies": {
+    "eslint": "3.1.1",
+    "eslint-config-airbnb": "9.0.1",
+    "eslint-plugin-import": "1.11.0",
+    "jscs": "3.0.7"
+  }
+}
