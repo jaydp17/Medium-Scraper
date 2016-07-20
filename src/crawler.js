@@ -40,7 +40,8 @@ class Crawler {
    * @private
    */
   _crawl(url) {
-    if (this.crawledUrls[url] || this.crawledSize >= this.maxPages) {
+    const isMediumLink = url.startsWith('https://medium.com');
+    if (this.crawledUrls[url] || this.crawledSize >= this.maxPages || !isMediumLink) {
       return Promise.resolve([]);
     }
 
