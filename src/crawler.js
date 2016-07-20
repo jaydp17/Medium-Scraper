@@ -1,4 +1,6 @@
 const Promise = require('bluebird');
+const _array = require('lodash/array');
+const debug = require('debug')('crawler');
 const Scraper = require('./scraper');
 
 /**
@@ -8,14 +10,16 @@ class Crawler {
 
   /**
    *
-   * @param maxPages the number of pages the crawler should crawl
+   * @param maxPages The number of pages the crawler should crawl
+   * @param requestThrottle The max number of active requests
    */
-  constructor(/* number */ maxPages) {
+  constructor(/* number */ maxPages, /* number */ requestThrottle) {
     this.foundUrls = [];
     this.crawledUrls = {};
-    this.crawlIndex = 0;
     this.crawledSize = 0;
+    this.chunkIndex = 0;
     this.maxPages = maxPages;
+    this.requestThrottle = requestThrottle;
   }
 
   /**
@@ -24,26 +28,41 @@ class Crawler {
    * @return {Promise<{foundUrls: Array<{link, text}>, crawledUrls}>}
    */
   crawl(/* string */ url) {
-    if (this.crawledUrls[url] || this.crawledSize >= this.maxPages) {
-      return Promise.resolve([]);
-    }
-
-    return Scraper.findAllLinks(url)
-      .tap(() => this.crawledUrls[url] = true)
-      .then(urlObjects => this.foundUrls = this.foundUrls.concat(urlObjects))
-      .then(() => this.crawl(this.getNextUrl()))
+    return this._crawl(url)
+      .then(() => this._crawlChunkWise())
       .then(() => ({ foundUrls: this.foundUrls, crawledUrls: this.crawledUrls }));
   }
 
   /**
-   * Figures out the next url to crawl, makes sure no url is crawled twice
-   * @return {string}
+   * Crawls a given url and adds all the found urls in <tt>this.foundUrls</tt>
+   * @param url The url to crawl
+   * @return {Promise}
+   * @private
    */
-  getNextUrl() {
-    // noinspection StatementWithEmptyBodyJS
-    while (this.crawledUrls[this.foundUrls[this.crawlIndex++].link]);
-    this.crawledSize++;
-    return this.foundUrls[this.crawlIndex].link;
+  _crawl(url) {
+    if (this.crawledUrls[url] || this.crawledSize >= this.maxPages) {
+      return Promise.resolve([]);
+    }
+
+    debug(`start crawling : ${url}`);
+
+    return Scraper.findAllLinks(url)
+      .tap(() => this.crawledUrls[url] = true)
+      .tap(() => this.crawledSize++)
+      .then(urlObjects => this.foundUrls = this.foundUrls.concat(urlObjects))
+      .then(() => debug(`finished crawling : ${url}`));
+  }
+
+  /**
+   * Divides the found urls into chunks and crawls them accordingly
+   * @return {Promise}
+   * @private
+   */
+  _crawlChunkWise() {
+    const chunks = _array.chunk(this.foundUrls, this.requestThrottle);
+    if (this.chunkIndex >= chunks.length) return Promise.resolve();
+    return Promise.map(chunks[this.chunkIndex++], item => this._crawl(item.link))
+      .then(() => this._crawlChunkWise());
   }
 
 }
