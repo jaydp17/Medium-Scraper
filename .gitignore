@@ -31,3 +31,4 @@ node_modules
 
 ## dev files
 /src2/
+/result.csv
