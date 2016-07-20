@@ -7,7 +7,7 @@ const CsvConverter = require('./csv-converter');
 const URL_TO_START = 'https://medium.com';
 const MAX_PAGES_TO_CRAWL = 15;
 const MAX_REQUEST_THROTTLE = 5;
-const OUTPUT_CSV_FILE = '../result.csv';
+const OUTPUT_CSV_FILE = 'result.csv';
 
 const crawler = new Crawler(MAX_PAGES_TO_CRAWL, MAX_REQUEST_THROTTLE);
 
