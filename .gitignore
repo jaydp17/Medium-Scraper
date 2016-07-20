@@ -28,3 +28,6 @@ node_modules
 
 ## File-based project format:
 *.iws
+
+## dev files
+/src2/

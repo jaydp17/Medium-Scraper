@@ -1,6 +1,9 @@
 {
   "extends": "airbnb/base",
   "rules": {
-    "no-confusing-arrow": 0
+    "no-confusing-arrow": 0,
+    "no-console": 0,
+    "no-underscore-dangle": 0,
+    "no-return-assign": 0
   }
 }

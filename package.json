@@ -22,5 +22,10 @@
     "eslint-config-airbnb": "9.0.1",
     "eslint-plugin-import": "1.11.0",
     "jscs": "3.0.7"
+  },
+  "dependencies": {
+    "bluebird": "3.4.1",
+    "lodash": "4.13.1",
+    "scraperjs": "1.2.0"
   }
 }
