@@ -7,6 +7,9 @@
     "start": "node src/app.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
+  "engines": {
+    "node": ">=6.2.2 <7.0.0"
+  },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/jaydeep17/Medium-Scraper.git"
